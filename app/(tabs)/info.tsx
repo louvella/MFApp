@@ -13,7 +13,7 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
-export default function HomeScreen() {
+export default function TabTwoScreen() {
   const insets = useSafeAreaInsets();
 
   return (
@@ -28,28 +28,39 @@ export default function HomeScreen() {
         headerImage={
           <Image
             source={require("@/assets/images/floatFuel.png")}
-            style={styles.fuelLogo}
+            style={styles.pLogo}
           />
         }
       >
-        <View>
-          <ThemedView style={styles.titleContainer}>
-            <ThemedText type="title">Welcome to</ThemedText>
-            <ThemedText type="title">MobileFuel</ThemedText>
-          </ThemedView>
-        </View>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">MobileFuel</ThemedText>
+        </ThemedView>
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">Weekend Special</ThemedText>
+          <ThemedText type="subtitle">About Us</ThemedText>
           <ThemedText>
-            Nec quidam vituperatoribus ea, in pri tollit eloquentiam. Adhuc
-            nonumes electram sit at.
+            Mobile fueling, also known as on-demand fuel delivery or wet-hosing,
+            is a service that brings fuel directly to vehicles or equipment from
+            a mobile vehicle, such as a tank truck. It can be used to fuel
+            fleets, stationary tanks, boats, or other machinery. Mobile fueling
+            can be conducted by an outside contractor or onsite staff.
           </ThemedText>
         </ThemedView>
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">Refer us and earn $$$$</ThemedText>
+          <ThemedText type="subtitle">Contact Information</ThemedText>
+          <ThemedText>MobileFuel</ThemedText>
+          <ThemedText>888 Main Street</ThemedText>
+          <ThemedText>City, State 99999-9999</ThemedText>
+          <ThemedText>(800) 555-5555</ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.stepContainer}>
+          <ThemedText type="subtitle">Owner / Operators</ThemedText>
           <ThemedText>
-            Feugiat invidunt senserit duo ut. Sale illud pro ad, vis justo
-            aliquip iudicabit in.
+            Mobile fueling, also known as on-demand fuel delivery or wet-hosing,
+            is a service that brings fuel directly to vehicles or equipment from
+            a mobile vehicle, such as a tank truck. It can be used to fuel
+            fleets, stationary tanks, boats, or other machinery. Mobile fueling
+            can be conducted by an outside contractor or onsite staff.
           </ThemedText>
         </ThemedView>
         <ThemedView style={styles.stepContainer}>
@@ -58,7 +69,12 @@ export default function HomeScreen() {
             Please be advised that there will be a 30 minute systemwide outage
             on Sunday 8/11/2024 at 1:00 am. Unfortunately Lorem ipsum dolor sit
             amet, per graeco eruditi comprehensam id, minim utamur interpretaris
-            duo ei.
+            duo ei, cum te meis civibus. Te mei fabellas deseruisse, vix cu
+            illud minimum. Ex mazim doming evertitur pro, ne convenire
+            eloquentiam nam, ullum omnium iisque ea est. Ei sea novum dicit
+            animal, et usu option alterum consequat. Sit an summo praesent. Et
+            dicta melius molestie sea, est ut corrumpit laboramus forensibus, ad
+            atqui similique eos.
           </ThemedText>
         </ThemedView>
       </ParallaxScrollView>
@@ -70,7 +86,6 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: 60,
-    //backgroundColor: "white",
     justifyContent: "center",
     alignItems: "flex-end",
     paddingRight: 16,
@@ -95,7 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
-  fuelLogo: {
+  pLogo: {
     height: "100%",
     width: "100%",
     position: "absolute",
