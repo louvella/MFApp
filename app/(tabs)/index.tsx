@@ -1,26 +1,44 @@
+// index.tsx
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {
-  Image,
-  StyleSheet,
-  Platform,
-  View,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { Image, StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  const checkLoginStatus = async () => {
+    const loginStatus = await AsyncStorage.getItem("isLoggedIn");
+    setIsLoggedIn(loginStatus !== null);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      checkLoginStatus();
+    }, [])
+  );
+  
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+  };
 
   return (
     <ThemedView style={{ flex: 1, paddingTop: insets.top }}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Login</Text>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={isLoggedIn ? handleLogout : () => router.push("/user")}
+        >
+          <Text style={styles.loginButtonText}>{isLoggedIn ? "Logout" : "Login"}</Text>
         </TouchableOpacity>
       </View>
       <ParallaxScrollView
@@ -70,7 +88,6 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: 60,
-    //backgroundColor: "white",
     justifyContent: "center",
     alignItems: "flex-end",
     paddingRight: 16,
@@ -94,7 +111,6 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
-
   fuelLogo: {
     height: "100%",
     width: "100%",

@@ -1,6 +1,6 @@
 // user.tsx
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function TabTwoScreen() {
   const insets = useSafeAreaInsets();
@@ -24,12 +25,15 @@ export default function TabTwoScreen() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [credit, setCredit] = useState("");
+  const [vehicle, setVehicle] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
+  useFocusEffect(
+    useCallback(() => {
+      checkLoginStatus();
+    }, [])
+  );
   const checkLoginStatus = async () => {
     const loginStatus = await AsyncStorage.getItem("isLoggedIn");
     setIsLoggedIn(loginStatus !== null);
@@ -95,6 +99,24 @@ export default function TabTwoScreen() {
                 AsyncStorage.setItem("address", text);
               }}
             />
+              <TextInput
+              style={styles.input}
+              placeholder="Credit Card"
+              value={credit}
+              onChangeText={(text) => {
+                setCredit(text);
+                AsyncStorage.setItem("address", text);
+              }}
+            />
+                        <TextInput
+              style={styles.input}
+              placeholder="Vehicle"
+              value={vehicle}
+              onChangeText={(text) => {
+                setVehicle(text);
+                AsyncStorage.setItem("address", text);
+              }}
+            />
           </View>
         ) : (
           <ThemedText>
@@ -140,7 +162,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     paddingRight: 16,
     paddingTop: 10,
-    //backgroundColor: "white",  // Ensure the background is white
+    
   },
   loginButton: {
     backgroundColor: "orange",
@@ -161,7 +183,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // semi-transparent background
+    backgroundColor: "rgba(0, 0, 0, 0.5)", 
   },
   modalView: {
     margin: 20,

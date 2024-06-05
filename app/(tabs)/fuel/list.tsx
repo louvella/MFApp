@@ -1,8 +1,11 @@
+
 import { ThemedText } from "@/components/ThemedText"
 import { ThemedView } from "@/components/ThemedView"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useGasStationContext } from "@/components/state";
 import { router, useNavigation } from "expo-router";
+import React, { useState, useEffect, useCallback } from "react";
+
 
 const List = () => {
   const gasStations = useGasStationContext() ?? []
@@ -10,6 +13,8 @@ const List = () => {
   const navigateToOperator = (id: number) => {
     router.push(`/fuel/${id}`)
   }
+  const getRandomPrice = () => (Math.random() * (3.75 - 3.59) + 3.59).toFixed(2);
+  const getRandomNumber = () => (Math.random() * (2.6 - 1.1) + 1.1).toFixed(1);
 
     return (
         <>
@@ -23,8 +28,9 @@ const List = () => {
           <Text style={styles.selectButtonText}>Select</Text>
         </TouchableOpacity>
         <View style={styles.stationInfo}>
-          <Text style={styles.stationName}>{station.tags.name || "Gas Station"}</Text>
+          <Text style={styles.stationName}>{station.tags.name || "Gas Station"}  - {getRandomNumber()} miles</Text>
           <Text style={styles.stationAddress}>{station.tags['addr:street'] || station.tags.vicinity || "No address available"}</Text>
+          <Text style={styles.stationAddress}>Unleaded: ${getRandomPrice()}</Text>
         </View>
       </View>
     ))}

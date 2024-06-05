@@ -1,10 +1,5 @@
-import React, { createContext, useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import React, { createContext, useEffect, useState, useCallback } from "react";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
@@ -12,14 +7,34 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedView } from "@/components/ThemedView";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Slot } from "expo-router";
-import { GasStation, GasStationContext, LocationContext } from "@/components/state";
-
-
+import {
+  GasStation,
+  GasStationContext,
+  LocationContext,
+} from "@/components/state";
+import { useRouter } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TabTwoScreen() {
   const insets = useSafeAreaInsets();
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [location, setLocation] = useState<Location.LocationObject | null>(
+    null
+  );
   const [gasStations, setGasStations] = useState([] as GasStation[]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  const checkLoginStatus = async () => {
+    const loginStatus = await AsyncStorage.getItem("isLoggedIn");
+    setIsLoggedIn(loginStatus !== null);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      checkLoginStatus();
+    }, [])
+  );
 
   useEffect(() => {
     (async () => {
@@ -44,18 +59,27 @@ export default function TabTwoScreen() {
 
     try {
       const response = await fetch(overpassUrl);
-      const data = await response.json()
+      const data = await response.json();
       setGasStations(data.elements);
     } catch (error) {
       console.error(error);
     }
   };
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+  };
 
   return (
     <ThemedView style={{ flex: 1, paddingTop: insets.top }}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Login</Text>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={isLoggedIn ? handleLogout : () => router.push("/user")}
+        >
+          <Text style={styles.loginButtonText}>
+            {isLoggedIn ? "Logout" : "Login"}
+          </Text>
         </TouchableOpacity>
       </View>
       <ParallaxScrollView

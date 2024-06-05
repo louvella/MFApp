@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useState, useCallback } from "react";
 import {
   Image,
   StyleSheet,
@@ -6,21 +7,50 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Switch,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 export default function TabTwoScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isRememberMe, setIsRememberMe] = useState(false);
+  const [isFaceID, setIsFaceID] = useState(false);
+  const [isNotifications, setIsNotifications] = useState(false);
+
+  const checkLoginStatus = async () => {
+    const loginStatus = await AsyncStorage.getItem("isLoggedIn");
+    setIsLoggedIn(loginStatus !== null);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      checkLoginStatus();
+    }, [])
+  );
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+  };
 
   return (
     <ThemedView style={{ flex: 1, paddingTop: insets.top }}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Login</Text>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={isLoggedIn ? handleLogout : () => router.push("/user")}
+        >
+          <Text style={styles.loginButtonText}>{isLoggedIn ? "Logout" : "Login"}</Text>
         </TouchableOpacity>
       </View>
       <ParallaxScrollView
